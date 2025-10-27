@@ -12,46 +12,6 @@ An interactive web map displaying voter count data across Uganda's districts for
 - **Tooltips**: Hover over districts to see quick information
 - **Responsive Design**: Works on desktop and mobile devices
 
-## Files
-
-- `index.html` - Main web page (open this in your browser)
-- `uganda_districts.geojson` - Geographic data with voter information
-- `Voter Count by District 2021_0.xlsx` - Original Excel data
-- `convert_shapefile.py` - Script to convert shapefile to GeoJSON
-
-## How to Use
-
-### Option 1: View Locally
-
-1. Make sure both `index.html` and `uganda_districts.geojson` are in the same folder
-2. Double-click `index.html` to open it in your web browser
-3. Use the dropdown menu to switch between "Total Voters" and "% of Total Votes"
-4. Click on any district for detailed information
-5. Hover over districts to see quick stats
-
-### Option 2: Deploy to GitHub Pages
-
-1. Create a new repository on GitHub
-2. Upload these files:
-   - `index.html`
-   - `uganda_districts.geojson`
-3. Go to repository Settings → Pages
-4. Under "Source", select "Deploy from a branch"
-5. Select the main branch and root folder
-6. Click Save
-7. Your site will be published at: `https://your-username.github.io/your-repo-name/`
-
-### Option 3: Use a Local Web Server
-
-If you have Python installed, you can run a local server:
-
-```bash
-# Python 3
-python -m http.server 8000
-
-# Then open in browser:
-# http://localhost:8000
-```
 
 ## Data Sources
 
@@ -94,16 +54,6 @@ Both metrics use a light green to dark green gradient:
 - Gray color indicates no data available for that district
 - All percentages are shown to 3 decimal places
 
-## Regenerating the GeoJSON
-
-If you need to update the data:
-
-1. Update the Excel file: `Voter Count by District 2021_0.xlsx`
-2. Run the conversion script:
-   ```bash
-   python convert_shapefile.py
-   ```
-3. This will regenerate `uganda_districts.geojson`
 
 ## Browser Compatibility
 
