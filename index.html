@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uganda Voter Count by District 2026</title>
+    <title>Uganda Voter Count by District 2021</title>
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -156,7 +156,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>Uganda Voter Count by District 2026</h1>
+        <h1>Uganda Voter Count by District 2021</h1>
         <p>Interactive map showing voter distribution across Uganda's districts</p>
     </div>
     
@@ -176,8 +176,19 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
-        // Initialize the map
-        const map = L.map('map').setView([1.3733, 32.2903], 7);
+        // Initialize the map with Uganda bounds
+        const ugandaBounds = [
+            [-1.54836521, 28.35342486], // Southwest coordinates
+            [4.29066485, 36.52351114]   // Northeast coordinates
+        ];
+        
+        const map = L.map('map', {
+            maxBounds: ugandaBounds,
+            maxBoundsViscosity: 0.5 // Allows slight pan outside bounds
+        });
+        
+        // Fit map to Uganda extent
+        map.fitBounds(ugandaBounds);
         
         // Add base tile layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
