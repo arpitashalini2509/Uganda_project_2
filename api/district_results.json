@@ -1,0 +1,90 @@
+{
+  "districts": [
+    {
+      "district_code": 70,
+      "district_name": "ABIM",
+      "registered_voters": 36539,
+      "votes_cast": 21234,
+      "valid_votes": 20876,
+      "invalid_votes": 358,
+      "turnout_percentage": 58.1,
+      "candidate_results": [
+        {"candidate_id": 1, "votes": 11234, "percentage": 53.8},
+        {"candidate_id": 2, "votes": 7845, "percentage": 37.6},
+        {"candidate_id": 3, "votes": 1234, "percentage": 5.9},
+        {"candidate_id": 4, "votes": 345, "percentage": 1.7},
+        {"candidate_id": 5, "votes": 218, "percentage": 1.0}
+      ],
+      "winner_id": 1
+    },
+    {
+      "district_code": 40,
+      "district_name": "ADJUMANI",
+      "registered_voters": 79364,
+      "votes_cast": 45876,
+      "valid_votes": 45123,
+      "invalid_votes": 753,
+      "turnout_percentage": 57.8,
+      "candidate_results": [
+        {"candidate_id": 1, "votes": 24567, "percentage": 54.5},
+        {"candidate_id": 2, "votes": 16789, "percentage": 37.2},
+        {"candidate_id": 3, "votes": 2345, "percentage": 5.2},
+        {"candidate_id": 4, "votes": 876, "percentage": 1.9},
+        {"candidate_id": 5, "votes": 546, "percentage": 1.2}
+      ],
+      "winner_id": 1
+    },
+    {
+      "district_code": 111,
+      "district_name": "AGAGO",
+      "registered_voters": 98354,
+      "votes_cast": 58234,
+      "valid_votes": 57456,
+      "invalid_votes": 778,
+      "turnout_percentage": 59.2,
+      "candidate_results": [
+        {"candidate_id": 1, "votes": 31234, "percentage": 54.4},
+        {"candidate_id": 2, "votes": 21567, "percentage": 37.5},
+        {"candidate_id": 3, "votes": 3123, "percentage": 5.4},
+        {"candidate_id": 4, "votes": 987, "percentage": 1.7},
+        {"candidate_id": 5, "votes": 545, "percentage": 0.9}
+      ],
+      "winner_id": 1
+    },
+    {
+      "district_code": 82,
+      "district_name": "BUIKWE",
+      "registered_voters": 235640,
+      "votes_cast": 142567,
+      "valid_votes": 140234,
+      "invalid_votes": 2333,
+      "turnout_percentage": 60.5,
+      "candidate_results": [
+        {"candidate_id": 1, "votes": 67890, "percentage": 48.4},
+        {"candidate_id": 2, "votes": 61234, "percentage": 43.7},
+        {"candidate_id": 3, "votes": 7654, "percentage": 5.5},
+        {"candidate_id": 4, "votes": 2345, "percentage": 1.7},
+        {"candidate_id": 5, "votes": 1111, "percentage": 0.8}
+      ],
+      "winner_id": 1
+    },
+    {
+      "district_code": 6,
+      "district_name": "KAMPALA",
+      "registered_voters": 885142,
+      "votes_cast": 534567,
+      "valid_votes": 528901,
+      "invalid_votes": 5666,
+      "turnout_percentage": 60.4,
+      "candidate_results": [
+        {"candidate_id": 2, "votes": 289234, "percentage": 54.7},
+        {"candidate_id": 1, "votes": 198765, "percentage": 37.6},
+        {"candidate_id": 3, "votes": 28456, "percentage": 5.4},
+        {"candidate_id": 4, "votes": 8234, "percentage": 1.6},
+        {"candidate_id": 5, "votes": 4212, "percentage": 0.8}
+      ],
+      "winner_id": 2
+    }
+  ]
+}
+

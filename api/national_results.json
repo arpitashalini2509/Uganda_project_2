@@ -1,0 +1,82 @@
+{
+  "election": {
+    "year": 2021,
+    "type": "Presidential",
+    "date": "2021-01-14",
+    "status": "completed"
+  },
+  "summary": {
+    "total_registered_voters": 18103603,
+    "total_valid_votes": 10350461,
+    "total_invalid_votes": 205667,
+    "total_votes_cast": 10556128,
+    "voter_turnout_percentage": 58.3,
+    "reporting_districts": 135,
+    "total_districts": 135,
+    "reporting_percentage": 100.0
+  },
+  "candidates": [
+    {
+      "id": 1,
+      "name": "Yoweri Kaguta Museveni",
+      "party": "National Resistance Movement (NRM)",
+      "photo": "https://via.placeholder.com/150/FF6B6B/FFFFFF?text=YKM",
+      "votes": 5851037,
+      "percentage": 56.54,
+      "color": "#FFD93D"
+    },
+    {
+      "id": 2,
+      "name": "Robert Kyagulanyi",
+      "party": "National Unity Platform (NUP)",
+      "photo": "https://via.placeholder.com/150/4ECDC4/FFFFFF?text=RK",
+      "votes": 3630398,
+      "percentage": 35.08,
+      "color": "#E63946"
+    },
+    {
+      "id": 3,
+      "name": "Patrick Oboi Amuriat",
+      "party": "Forum for Democratic Change (FDC)",
+      "photo": "https://via.placeholder.com/150/95E1D3/FFFFFF?text=POA",
+      "votes": 340648,
+      "percentage": 3.29,
+      "color": "#457B9D"
+    },
+    {
+      "id": 4,
+      "name": "Henry Tumukunde",
+      "party": "Independent",
+      "photo": "https://via.placeholder.com/150/F38181/FFFFFF?text=HT",
+      "votes": 87847,
+      "percentage": 0.85,
+      "color": "#2A9D8F"
+    },
+    {
+      "id": 5,
+      "name": "Nancy Linda Kalembe",
+      "party": "Uganda Federal Alliance (UFA)",
+      "photo": "https://via.placeholder.com/150/AA96DA/FFFFFF?text=NLK",
+      "votes": 40531,
+      "percentage": 0.39,
+      "color": "#E76F51"
+    },
+    {
+      "id": 6,
+      "name": "Others",
+      "party": "Various",
+      "photo": "https://via.placeholder.com/150/CCCCCC/FFFFFF?text=Others",
+      "votes": 400000,
+      "percentage": 3.85,
+      "color": "#94A3B8"
+    }
+  ],
+  "winner": {
+    "candidate_id": 1,
+    "name": "Yoweri Kaguta Museveni",
+    "party": "National Resistance Movement (NRM)",
+    "votes": 5851037,
+    "percentage": 56.54
+  }
+}
+
