@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uganda Voter Count by District 2021</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .control-group label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .control-group select {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 200px;
+        }
+        
+        .control-group select:hover {
+            border-color: #667eea;
+        }
+        
+        .control-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        #map {
+            height: calc(100vh - 160px);
+            width: 100%;
+        }
+        
+        .legend {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            line-height: 24px;
+            max-width: 250px;
+        }
+        
+        .legend h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+        
+        .legend-color {
+            width: 30px;
+            height: 18px;
+            border-radius: 3px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .info-box {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            min-width: 200px;
+        }
+        
+        .info-box h4 {
+            margin: 0 0 8px 0;
+            color: #667eea;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .info-box p {
+            margin: 4px 0;
+            font-size: 13px;
+            color: #555;
+        }
+        
+        .info-box .value {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        /* Tooltip styling */
+        .leaflet-tooltip {
+            background: rgba(0, 0, 0, 0.8);
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 12px;
+            padding: 6px 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Uganda Voter Count by District 2021</h1>
+        <p>Interactive map showing voter distribution across Uganda's districts</p>
+    </div>
+    
+    <div class="controls">
+        <div class="control-group">
+            <label for="metric-select">Display Metric:</label>
+            <select id="metric-select">
+                <option value="TOTAL_VOTERS">Total Voters</option>
+                <option value="PCT_TOTAL_VOTE">% of Total Votes</option>
+            </select>
+        </div>
+    </div>
+    
+    <div id="map"></div>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // Initialize the map
+        const map = L.map('map').setView([1.3733, 32.2903], 7);
+        
+        // Add base tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 18
+        }).addTo(map);
+        
+        // Global variables
+        let geojsonLayer;
+        let currentMetric = 'TOTAL_VOTERS';
+        let geojsonData;
+        
+        // Color scales - Light green to dark green gradient
+        const colorScales = {
+            TOTAL_VOTERS: [
+                { min: 0, max: 50000, color: '#edf8e9' },
+                { min: 50000, max: 100000, color: '#bae4b3' },
+                { min: 100000, max: 150000, color: '#74c476' },
+                { min: 150000, max: 200000, color: '#41ab5d' },
+                { min: 200000, max: 300000, color: '#238b45' },
+                { min: 300000, max: 500000, color: '#005a32' }
+            ],
+            PCT_TOTAL_VOTE: [
+                { min: 0, max: 0.2, color: '#edf8e9' },
+                { min: 0.2, max: 0.4, color: '#bae4b3' },
+                { min: 0.4, max: 0.6, color: '#74c476' },
+                { min: 0.6, max: 0.8, color: '#41ab5d' },
+                { min: 0.8, max: 1.0, color: '#238b45' },
+                { min: 1.0, max: 10, color: '#005a32' }
+            ]
+        };
+        
+        // Get color based on metric value
+        function getColor(value, metric) {
+            if (value === null || value === undefined) {
+                return '#cccccc';
+            }
+            
+            const scale = colorScales[metric];
+            for (let i = 0; i < scale.length; i++) {
+                if (value >= scale[i].min && value < scale[i].max) {
+                    return scale[i].color;
+                }
+            }
+            return scale[scale.length - 1].color;
+        }
+        
+        // Style function for features
+        function style(feature) {
+            const value = feature.properties[currentMetric];
+            return {
+                fillColor: getColor(value, currentMetric),
+                weight: 1,
+                opacity: 1,
+                color: 'white',
+                fillOpacity: 0.7
+            };
+        }
+        
+        // Highlight feature on hover
+        function highlightFeature(e) {
+            const layer = e.target;
+            layer.setStyle({
+                weight: 3,
+                color: '#666',
+                fillOpacity: 0.9
+            });
+            layer.bringToFront();
+        }
+        
+        // Reset highlight
+        function resetHighlight(e) {
+            geojsonLayer.resetStyle(e.target);
+        }
+        
+        // Create popup content
+        function createPopupContent(properties) {
+            const districtName = properties.ADM2_EN || 'Unknown';
+            const totalVoters = properties.TOTAL_VOTERS;
+            const pctVote = properties.PCT_TOTAL_VOTE;
+            
+            let content = `<div class="info-box">
+                <h4>${districtName} District</h4>`;
+            
+            if (totalVoters !== null && totalVoters !== undefined) {
+                content += `<p><strong>Total Voters:</strong> <span class="value">${totalVoters.toLocaleString()}</span></p>`;
+            } else {
+                content += `<p><strong>Total Voters:</strong> <span class="value">No data</span></p>`;
+            }
+            
+            if (pctVote !== null && pctVote !== undefined) {
+                content += `<p><strong>% of Total Vote:</strong> <span class="value">${pctVote.toFixed(3)}%</span></p>`;
+            } else {
+                content += `<p><strong>% of Total Vote:</strong> <span class="value">No data</span></p>`;
+            }
+            
+            content += `</div>`;
+            return content;
+        }
+        
+        // On each feature
+        function onEachFeature(feature, layer) {
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight,
+                click: function(e) {
+                    const content = createPopupContent(feature.properties);
+                    L.popup()
+                        .setLatLng(e.latlng)
+                        .setContent(content)
+                        .openOn(map);
+                }
+            });
+            
+            // Add tooltip
+            const districtName = feature.properties.ADM2_EN || 'Unknown';
+            const value = feature.properties[currentMetric];
+            let tooltipText = `${districtName}<br>`;
+            
+            if (value !== null && value !== undefined) {
+                if (currentMetric === 'TOTAL_VOTERS') {
+                    tooltipText += `${value.toLocaleString()} voters`;
+                } else {
+                    tooltipText += `${value.toFixed(3)}%`;
+                }
+            } else {
+                tooltipText += 'No data';
+            }
+            
+            layer.bindTooltip(tooltipText, {
+                sticky: true,
+                className: 'custom-tooltip'
+            });
+        }
+        
+        // Load and display GeoJSON
+        function loadGeoJSON() {
+            fetch('uganda_districts.geojson')
+                .then(response => response.json())
+                .then(data => {
+                    geojsonData = data;
+                    updateMap();
+                    createLegend();
+                })
+                .catch(error => {
+                    console.error('Error loading GeoJSON:', error);
+                    alert('Error loading map data. Please make sure uganda_districts.geojson is in the same folder as this HTML file.');
+                });
+        }
+        
+        // Update map with current metric
+        function updateMap() {
+            if (geojsonLayer) {
+                map.removeLayer(geojsonLayer);
+            }
+            
+            geojsonLayer = L.geoJSON(geojsonData, {
+                style: style,
+                onEachFeature: onEachFeature
+            }).addTo(map);
+        }
+        
+        // Create legend
+        function createLegend() {
+            const legend = L.control({ position: 'bottomright' });
+            
+            legend.onAdd = function(map) {
+                const div = L.DomUtil.create('div', 'legend');
+                updateLegendContent(div);
+                return div;
+            };
+            
+            legend.addTo(map);
+            window.legendControl = legend;
+        }
+        
+        // Update legend content
+        function updateLegendContent(div) {
+            const scale = colorScales[currentMetric];
+            let title = currentMetric === 'TOTAL_VOTERS' ? 'Total Voters' : '% of Total Votes';
+            
+            let html = `<h4>${title}</h4>`;
+            
+            for (let i = 0; i < scale.length; i++) {
+                const range = scale[i];
+                let label;
+                
+                if (currentMetric === 'TOTAL_VOTERS') {
+                    label = `${range.min.toLocaleString()} - ${range.max.toLocaleString()}`;
+                } else {
+                    label = `${range.min.toFixed(1)}% - ${range.max.toFixed(1)}%`;
+                }
+                
+                html += `<div class="legend-item">
+                    <div class="legend-color" style="background-color: ${range.color}"></div>
+                    <span>${label}</span>
+                </div>`;
+            }
+            
+            html += `<div class="legend-item">
+                <div class="legend-color" style="background-color: #cccccc"></div>
+                <span>No data</span>
+            </div>`;
+            
+            div.innerHTML = html;
+        }
+        
+        // Handle metric change
+        document.getElementById('metric-select').addEventListener('change', function(e) {
+            currentMetric = e.target.value;
+            updateMap();
+            
+            // Update legend
+            const legendDiv = document.querySelector('.legend');
+            if (legendDiv) {
+                updateLegendContent(legendDiv);
+            }
+        });
+        
+        // Load data on page load
+        loadGeoJSON();
+    </script>
+</body>
+</html>
+
